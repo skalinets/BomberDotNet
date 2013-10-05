@@ -6,7 +6,6 @@ namespace Bomberman.Api
     {
         void Connect();
         event EventHandler<NewPositionArgs> NewPosition;
-
         void NextMove(string nextMove);
     }
 }
