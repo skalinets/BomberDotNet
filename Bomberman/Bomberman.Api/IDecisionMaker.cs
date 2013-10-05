@@ -11,7 +11,7 @@ namespace Bomberman.Api
     {
         public string NextMove(string board)
         {
-            var moves = new string[]{"up", "right"};
+            var moves = new[]{"up", "right", "left", "down"};
             var index = new Random().Next(moves.Length);
             return moves[index];
         }
