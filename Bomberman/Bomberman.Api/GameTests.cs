@@ -36,14 +36,14 @@ namespace Bomberman.Api
         public void TestGameStart(
             [Frozen] IGameConnector gameConnector, 
             [Frozen] IDecisionMaker maker, 
-            string board, string nextMove, Game game)
+            string board, Moves nextMove, Game game)
         {
             maker.NextMove(board).Returns(nextMove);
             game.Start();
             
             gameConnector.NewPosition += Raise.EventWith(new Object(), new NewPositionArgs(board));
 
-            gameConnector.Received().NextMove(nextMove);
+            gameConnector.Received().NextMove(nextMove.ToString());
 
         }
     }

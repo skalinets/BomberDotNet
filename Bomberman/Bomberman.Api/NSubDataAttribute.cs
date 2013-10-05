@@ -6,9 +6,14 @@ namespace Bomberman.Api
 {
     public class NSubDataAttribute : AutoDataAttribute
     {
-        public NSubDataAttribute() : base(new Fixture().Customize(new AutoNSubstituteCustomization()))
+        public NSubDataAttribute() : base(GetFixture())
         {
 
+        }
+
+        public static IFixture GetFixture()
+        {
+            return new Fixture().Customize(new AutoNSubstituteCustomization());
         }
     }
 }

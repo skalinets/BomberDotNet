@@ -20,7 +20,7 @@ namespace Bomberman.Api
                 {
                     var nextMove = decisionMaker.NextMove(args.Board);
                     Console.Out.WriteLine("nextMove = {0}", nextMove);
-                    gameConnector.NextMove(nextMove);
+                    gameConnector.NextMove(nextMove.ToString());
                 };
         }
     }
