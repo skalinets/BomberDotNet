@@ -9,15 +9,15 @@ using Xunit.Extensions;
 
 namespace Bomberman.Api
 {
-    public class TestThis
+    public class GameTests
     {
         [Fact(Skip="integration stuff")]
         public  void doit()
         {
             var list = new List<string>();
-            var game = new GameConnector();
-            game.NewPosition += (sender, args) => list.Add(args.Board);
-            game.Connect();
+            var gameConnector = new GameConnector();
+            gameConnector.NewPosition += (sender, args) => list.Add(args.Board);
+            gameConnector.Connect();
             Thread.Sleep(1000);
             list.Should().NotBeEmpty(); 
         }

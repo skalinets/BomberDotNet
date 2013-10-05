@@ -82,7 +82,7 @@
     <Compile Include="NewPositionArgs.cs" />
     <Compile Include="NSubDataAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestThis.cs" />
+    <Compile Include="GameTests.cs" />
     <Compile Include="GameConnector.cs" />
   </ItemGroup>
   <ItemGroup>
