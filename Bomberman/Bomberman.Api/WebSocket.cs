@@ -2,19 +2,28 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using NSubstitute;
+using Ninject;
+using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.AutoNSubstitute;
 using Ploeh.AutoFixture.Xunit;
 using WebSocket4Net;
 using Xunit;
 using FluentAssertions;
 using Xunit.Extensions;
+using Ninject.Extensions.Conventions;
 
 namespace Bomberman.Api
 {
-    public class GameConnector
+    public class GameConnector: IGameConnector
     {
         private WebSocket websocket;
 
-        public EventHandler<NewPositionArgs> NewPosition = (sender, args) => { };
+        public event EventHandler<NewPositionArgs> NewPosition = (sender, args) => { };
+        public void NextMove(string nextMove)
+        {
+            websocket.Send(nextMove);
+        }
 
         public void Connect()
         {
@@ -31,15 +40,6 @@ namespace Bomberman.Api
                     NewPosition(this, new NewPositionArgs(lastMessage));
                 };
             InnerConnect().Wait();
-            websocket.Send("left");
-            Thread.Sleep(1000);
-            websocket.Send("right");
-            Thread.Sleep(1000);
-            websocket.Send("up");
-            Thread.Sleep(1000);   
-            websocket.Send("down");
-            Thread.Sleep(1000);
-            websocket.Send("act");
         }
 
         private Task InnerConnect()
@@ -71,7 +71,7 @@ namespace Bomberman.Api
         }
     }
 
-    public class NewPositionArgs
+    public class NewPositionArgs : EventArgs
     {
         public NewPositionArgs(string board)
         {
@@ -83,8 +83,10 @@ namespace Bomberman.Api
 
     public class TestThis
     {
-        [Theory, AutoData]
-        public  void doit(string s)
+//        [Fact]
+//        public void marker
+        [Fact]
+        public  void doit()
         {
             var list = new List<string>();
             var game = new GameConnector();
@@ -94,10 +96,101 @@ namespace Bomberman.Api
             list.Should().NotBeEmpty(); 
         }
 
-        [Fact]
-        public void TestGameStart()
+        [Theory, NSubData]
+        public void game_should_start_listening_to_server(
+            [Frozen] IGameConnector gameConnector,
+            Game game)
         {
-            
+            game.Start();
+
+            gameConnector.Received().Connect();
+        }
+
+
+        [Theory, NSubData]
+        public void TestGameStart(
+            [Frozen] IGameConnector gameConnector, 
+            [Frozen] IDecisionMaker maker, 
+            string board, string nextMove, Game game)
+        {
+            maker.NextMove(board).Returns(nextMove);
+
+            game.Start();
+
+            gameConnector.NewPosition += Raise.EventWith(new Object(), new NewPositionArgs(board));
+
+            gameConnector.Received().NextMove(nextMove);
+
+        }
+    }
+
+    public class Game
+    {
+        private readonly IGameConnector gameConnector;
+        private readonly IDecisionMaker decisionMaker;
+
+        public Game(IGameConnector gameConnector, IDecisionMaker decisionMaker)
+        {
+            this.gameConnector = gameConnector;
+            this.decisionMaker = decisionMaker;
+        }
+
+        public void Start()
+        {
+            gameConnector.Connect();
+            gameConnector.NewPosition += (sender, args) =>
+                {
+                    var nextMove = decisionMaker.NextMove(args.Board);
+                    Console.Out.WriteLine("nextMove = {0}", nextMove);
+                    gameConnector.NextMove(nextMove);
+                };
+        }
+    }
+
+    public interface IGameConnector
+    {
+        void Connect();
+        event EventHandler<NewPositionArgs> NewPosition;
+
+        void NextMove(string nextMove);
+    }
+
+    public class NSubDataAttribute : AutoDataAttribute
+    {
+        public NSubDataAttribute() : base(new Fixture().Customize(new AutoNSubstituteCustomization()))
+        {
+
+        }
+    }
+     public class BootstrapperTests
+     {
+         [Fact]
+         public void should_create_game()
+         {
+             new Bootstrapper().GetGame().Should().NotBeNull();
+
+         }
+     }
+
+    public class DecisionMakerTests
+    {
+        [Theory, NSubDataAttribute]
+        public void should_respond_in_allowed_way(DecisionMaker decisionMaker, string board)
+        {
+            decisionMaker.NextMove(board).Should().BeOneOf("up", "down", "left", "right", "act");
+        }
+    }
+
+    public class Bootstrapper
+    {
+        public Game GetGame()
+        {
+            var kernel = new StandardKernel();
+            kernel.Bind(x =>
+                                      x.FromThisAssembly()
+                                       .SelectAllClasses()
+                                       .BindDefaultInterface());
+            return kernel.Get<Game>();
         }
     }
 }

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bomberman.Api", "Bomberman.Api\Bomberman.Api.csproj", "{26B1AE94-CB40-411A-8A64-84285E395780}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runner", "Runner\Runner.csproj", "{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,16 @@ Global
 		{26B1AE94-CB40-411A-8A64-84285E395780}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{26B1AE94-CB40-411A-8A64-84285E395780}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{26B1AE94-CB40-411A-8A64-84285E395780}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0C6AD8EF-1646-4557-8DAC-103A0B4DA226}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
