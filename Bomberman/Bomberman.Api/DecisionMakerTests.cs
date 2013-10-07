@@ -53,7 +53,6 @@ namespace Bomberman.Api
                                     .Put(2, 1, Items.Bomber)
                                     .Put(1, 1, Items.Wall)
                                     .Put(3, 1, Items.Wall);
-//                .Put(1,, Items.Wall);
             Console.Out.WriteLine("board = {0}", board);
             decisionMaker.NextMove(board).Should().Be(Moves.Right);
 
